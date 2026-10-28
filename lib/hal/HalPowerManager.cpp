@@ -22,6 +22,9 @@
 #if FREEINK_DEVICE_PAPERMONO
 #include <M5Pm1.h>
 #endif
+#if FREEINK_DEVICE_PAPERDIY
+#include <PaperDiyBoard.h>
+#endif
 
 HalPowerManager powerManager;  // Singleton instance
 
@@ -145,6 +148,13 @@ void HalPowerManager::startDeepSleep(HalGPIO& gpio, const bool wakeOnHeldButton)
   // normal GPIO deep sleep would have no wake source. Ask the PMIC to shut the
   // device down; a button click then restarts it through a cold boot.
   if (freeink::m5pm1::requestShutdown()) {
+    delay(1000);  // allow the PMIC firmware time to drop power
+  }
+#endif
+#if FREEINK_DEVICE_PAPERDIY
+  // Same as Paper Mono: the power button is behind the M5PM1, so ask it to shut
+  // the board down (also drops the panel rail); a click cold-boots it.
+  if (freeink::paperdiy::powerOff()) {
     delay(1000);  // allow the PMIC firmware time to drop power
   }
 #endif

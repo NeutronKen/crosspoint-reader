@@ -222,7 +222,7 @@ bool HalGPIO::verifyPowerButtonWakeup() {
   // wheel click, so a click wake is always released before this samples and
   // verification would re-sleep on every wake. Its wheel has hard external
   // pull-ups, so the ghost-wake debounce this implements is not needed.
-  if (BoardConfig::isPaperMono() || BoardConfig::isM5PaperV11() || BoardConfig::ACTIVE.input.power < 0) {
+  if (BoardConfig::isPaperMono() || BoardConfig::isPaperDiy() || BoardConfig::isM5PaperV11() || BoardConfig::ACTIVE.input.power < 0) {
     return true;
   }
 
@@ -266,7 +266,7 @@ bool HalGPIO::coldBootImpliesPowerButton() const {
   // EEGO A4 misread them the same way once the charger terminates at 100%
   // (STAT inactive reads as "no USB").
   // The Metalio sleeps powered off and only its button turns it back on.
-  return isXteinkDevice() || BoardConfig::isPaperMono() || BoardConfig::isSticky() || BoardConfig::isMetalioEInk4();
+  return isXteinkDevice() || BoardConfig::isPaperMono() || BoardConfig::isPaperDiy() || BoardConfig::isSticky() || BoardConfig::isMetalioEInk4();
 }
 
 HalGPIO::WakeupReason HalGPIO::getWakeupReason() const {
